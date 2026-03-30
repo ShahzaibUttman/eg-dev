@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evergreen Energy — Project Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --purple:     #534AB7;
+  --purple-l:   #EEEDFE;
+  --purple-d:   #3C3489;
+  --purple-mid: #AFA9EC;
+  --teal:       #1D9E75;
+  --teal-l:     #E1F5EE;
+  --teal-d:     #085041;
+  --coral:      #D85A30;
+  --coral-l:    #FAECE7;
+  --amber:      #BA7517;
+  --amber-l:    #FAEEDA;
+  --gray:       #5F5E5A;
+  --gray-l:     #F5F4F0;
+  --gray-mid:   #D3D1C7;
+  --ink:        #16150F;
+  --page:       #0C0B08;
+  --s1:         #161510;
+  --s2:         #1E1D17;
+  --s3:         #26251E;
+  --border:     rgba(255,255,255,0.07);
+  --border2:    rgba(255,255,255,0.12);
+  --t1:         rgba(255,255,255,0.9);
+  --t2:         rgba(255,255,255,0.55);
+  --t3:         rgba(255,255,255,0.3);
+  --t4:         rgba(255,255,255,0.15);
+  --font-d:     'Fraunces', Georgia, serif;
+  --font-m:     'DM Mono', monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font-m);background:var(--page);color:var(--t1);min-height:100vh;overflow-x:hidden;}
+
+/* ── SIDEBAR NAV ── */
+.sidebar{position:fixed;left:0;top:0;width:220px;height:100vh;background:var(--s1);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;overflow-y:auto;}
+.sidebar-logo{padding:24px 20px 16px;border-bottom:1px solid var(--border);}
+.sidebar-logo h1{font-family:var(--font-d);font-size:15px;font-weight:900;color:var(--t1);line-height:1.2;margin-bottom:3px;}
+.sidebar-logo p{font-size:9px;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;}
+.nav-section{padding:16px 12px 6px;font-size:8.5px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--t4);}
+.nav-link{display:flex;align-items:center;gap:8px;padding:7px 12px;font-size:11px;color:var(--t3);text-decoration:none;border-radius:5px;margin:1px 6px;transition:background .15s,color .15s;cursor:pointer;border:none;background:none;width:calc(100% - 12px);text-align:left;}
+.nav-link:hover{background:var(--s3);color:var(--t1);}
+.nav-link.active{background:rgba(83,74,183,0.15);color:var(--purple-mid);}
+.nav-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.nav-dot.purple{background:var(--purple);}
+.nav-dot.teal{background:var(--teal);}
+.nav-dot.coral{background:var(--coral);}
+.nav-dot.amber{background:var(--amber);}
+.nav-dot.gray{background:var(--gray);}
+
+/* ── MAIN ── */
+.main{margin-left:220px;min-height:100vh;}
+
+/* ── TOPBAR ── */
+.topbar{padding:20px 40px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--s1);position:sticky;top:0;z-index:50;}
+.topbar-title{font-family:var(--font-d);font-size:17px;font-weight:700;color:var(--t1);}
+.topbar-meta{display:flex;gap:12px;align-items:center;}
+.status-chip{font-size:9px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:20px;}
+.status-chip.live{background:rgba(29,158,117,0.15);color:var(--teal);border:1px solid rgba(29,158,117,0.3);}
+.status-chip.building{background:rgba(83,74,183,0.15);color:var(--purple-mid);border:1px solid rgba(83,74,183,0.3);}
+
+/* ── PAGE SECTIONS ── */
+.page-section{display:none;padding:36px 40px 60px;}
+.page-section.active{display:block;}
+
+/* ── SECTION HEADER ── */
+.sec-hdr{margin-bottom:28px;}
+.sec-hdr h2{font-family:var(--font-d);font-size:26px;font-weight:900;color:var(--t1);margin-bottom:6px;}
+.sec-hdr p{font-size:12px;color:var(--t3);line-height:1.7;max-width:600px;}
+
+/* ── STAT ROW ── */
+.stat-row{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:32px;}
+.stat-card{background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:16px 18px;}
+.stat-num{font-family:var(--font-d);font-size:28px;font-weight:900;line-height:1;margin-bottom:4px;}
+.stat-num.purple{color:var(--purple-mid);}
+.stat-num.teal{color:var(--teal);}
+.stat-num.coral{color:var(--coral);}
+.stat-num.amber{color:#EF9F27;}
+.stat-label{font-size:9.5px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);}
+
+/* ── TASK LIST ── */
+.week-block{margin-bottom:24px;}
+.week-hdr{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.week-hdr h3{font-family:var(--font-d);font-size:14px;font-weight:700;color:var(--t1);}
+.week-date{font-size:10px;color:var(--t3);}
+.week-hrs{font-size:10px;font-weight:500;padding:2px 8px;border-radius:10px;background:var(--s3);color:var(--t2);}
+.phase-bar{height:3px;border-radius:2px;margin-bottom:14px;}
+.phase-bar.kickoff{background:var(--purple);}
+.phase-bar.build{background:var(--teal);}
+.phase-bar.docs{background:var(--amber);}
+.phase-bar.test{background:var(--coral);}
+
+.task-item{display:flex;align-items:flex-start;gap:10px;padding:8px 12px;border-radius:6px;margin-bottom:4px;background:var(--s2);border:1px solid var(--border);transition:border-color .15s;}
+.task-item:hover{border-color:var(--border2);}
+.task-item.done{opacity:.45;}
+.task-cb{width:16px;height:16px;border-radius:4px;border:1px solid var(--border2);flex-shrink:0;margin-top:1px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s,border-color .15s;}
+.task-cb.checked{background:var(--teal);border-color:var(--teal);}
+.task-cb.checked::after{content:'✓';font-size:10px;color:#fff;}
+.task-text{font-size:12px;color:var(--t2);line-height:1.5;flex:1;}
+.task-item.done .task-text{text-decoration:line-through;color:var(--t4);}
+.task-date{font-size:10px;color:var(--t3);white-space:nowrap;padding:1px 6px;background:var(--s3);border-radius:4px;}
+.task-date.today{background:rgba(83,74,183,0.2);color:var(--purple-mid);}
+.task-tag{font-size:9px;font-weight:500;padding:1px 6px;border-radius:3px;white-space:nowrap;}
+.tag-dep{background:rgba(186,117,23,0.2);color:#EF9F27;border:1px solid rgba(186,117,23,0.3);}
+.tag-out{background:rgba(29,158,117,0.2);color:var(--teal);border:1px solid rgba(29,158,117,0.3);}
+.tag-build{background:rgba(83,74,183,0.2);color:var(--purple-mid);border:1px solid rgba(83,74,183,0.3);}
+
+/* ── PROGRESS ── */
+.progress-wrap{background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin-bottom:24px;display:flex;align-items:center;gap:16px;}
+.progress-bar{flex:1;height:6px;background:var(--s3);border-radius:3px;overflow:hidden;}
+.progress-fill{height:100%;background:var(--teal);border-radius:3px;transition:width .4s;}
+.progress-label{font-size:12px;color:var(--t2);white-space:nowrap;}
+.progress-pct{font-family:var(--font-d);font-size:18px;font-weight:700;color:var(--teal);min-width:44px;text-align:right;}
+
+/* ── BOARD FLOW ── */
+.flow-wrap{display:grid;grid-template-columns:1fr 380px;gap:24px;}
+.flow-stages{display:flex;flex-direction:column;gap:6px;}
+.flow-stage{display:grid;grid-template-columns:32px 1fr;border-radius:8px;overflow:hidden;border:1px solid var(--border);cursor:pointer;transition:border-color .2s,transform .15s;}
+.flow-stage:hover{border-color:rgba(83,74,183,0.4);transform:translateX(3px);}
+.flow-stage.selected{border-color:var(--purple);}
+.flow-stage.key{border-color:rgba(83,74,183,0.35);}
+.stage-n{background:var(--s3);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:var(--t3);border-right:1px solid var(--border);}
+.flow-stage.selected .stage-n,.flow-stage.key .stage-n{background:var(--purple);color:#fff;}
+.stage-b{padding:10px 14px;background:var(--s2);display:flex;align-items:center;justify-content:space-between;}
+.flow-stage:hover .stage-b,.flow-stage.selected .stage-b{background:var(--s3);}
+.stage-title{font-size:13px;font-weight:500;color:var(--t1);}
+.stage-sub{font-size:10px;color:var(--t3);margin-top:2px;}
+.stage-tags{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;}
+.auto-tag{font-size:9px;font-weight:500;padding:2px 6px;border-radius:3px;}
+.auto-tag.red{background:rgba(216,90,48,0.2);color:#F0997B;border:1px solid rgba(216,90,48,0.25);}
+.auto-tag.purple{background:rgba(83,74,183,0.2);color:var(--purple-mid);border:1px solid rgba(83,74,183,0.25);}
+.auto-tag.amber{background:rgba(186,117,23,0.2);color:#EF9F27;border:1px solid rgba(186,117,23,0.25);}
+
+.connector-v{height:20px;display:flex;align-items:center;justify-content:center;position:relative;}
+.connector-v::before{content:'';position:absolute;left:50%;top:0;width:1px;height:100%;background:rgba(83,74,183,0.3);}
+.connector-v span{font-size:9px;color:var(--t4);background:var(--page);padding:0 6px;position:relative;z-index:1;letter-spacing:.06em;text-transform:uppercase;}
+
+.burst-row{display:flex;gap:6px;margin:4px 0 4px 32px;flex-wrap:wrap;}
+.burst-chip{flex:1;min-width:100px;padding:7px 10px;background:rgba(216,90,48,0.07);border:1px solid rgba(216,90,48,0.18);border-radius:5px;cursor:pointer;transition:background .15s,border-color .15s;}
+.burst-chip:hover,.burst-chip.selected{background:rgba(216,90,48,0.14);border-color:var(--coral);}
+.burst-chip-label{font-size:9px;font-weight:500;color:#F0997B;letter-spacing:.05em;margin-bottom:3px;}
+.burst-chip-desc{font-size:10px;color:var(--t3);line-height:1.4;}
+
+.ds-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:6px;}
+.ds-card{padding:10px 12px;border-radius:6px;border:1px solid rgba(29,158,117,0.2);background:rgba(29,158,117,0.05);cursor:pointer;transition:background .15s,border-color .15s,transform .15s;}
+.ds-card:hover,.ds-card.selected{background:rgba(29,158,117,0.1);border-color:rgba(29,158,117,0.5);transform:translateY(-2px);}
+.ds-name{font-size:11.5px;font-weight:500;color:var(--t1);margin-bottom:2px;}
+.ds-desc{font-size:10px;color:var(--t3);line-height:1.4;}
+
+.dash-node{margin-top:6px;padding:12px 16px;background:rgba(83,74,183,0.08);border:1px solid rgba(83,74,183,0.25);border-radius:8px;cursor:pointer;text-align:center;transition:background .15s;}
+.dash-node:hover,.dash-node.selected{background:rgba(83,74,183,0.15);border-color:var(--purple);}
+.dash-node h3{font-family:var(--font-d);font-size:13px;font-weight:700;color:var(--t1);margin-bottom:2px;}
+.dash-node p{font-size:10px;color:var(--purple-mid);}
+
+.om-node{margin-top:6px;padding:10px 16px;background:var(--s2);border:1px solid var(--border);border-radius:8px;cursor:pointer;text-align:center;transition:border-color .15s;}
+.om-node:hover,.om-node.selected{border-color:var(--border2);}
+.om-node h3{font-size:12px;font-weight:500;color:var(--t2);margin-bottom:2px;}
+.om-node p{font-size:10px;color:var(--t4);}
+
+/* DETAIL PANEL */
+.detail-panel{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:24px;height:fit-content;position:sticky;top:80px;max-height:calc(100vh - 100px);overflow-y:auto;}
+.detail-panel .empty{text-align:center;padding:40px 20px;}
+.detail-panel .empty p{font-size:11px;color:var(--t4);line-height:1.7;}
+.d-tag{display:inline-block;font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:20px;margin-bottom:12px;}
+.d-tag.stage{background:rgba(83,74,183,0.15);color:var(--purple-mid);border:1px solid rgba(83,74,183,0.25);}
+.d-tag.auto{background:rgba(216,90,48,0.15);color:#F0997B;border:1px solid rgba(216,90,48,0.25);}
+.d-tag.board{background:rgba(29,158,117,0.15);color:var(--teal);border:1px solid rgba(29,158,117,0.25);}
+.d-title{font-family:var(--font-d);font-size:18px;font-weight:900;color:var(--t1);margin-bottom:4px;line-height:1.2;}
+.d-sub{font-size:11px;color:var(--t3);margin-bottom:16px;line-height:1.6;}
+.d-divider{height:1px;background:var(--border);margin:14px 0;}
+.d-sec-title{font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--t4);margin-bottom:8px;}
+.d-body{font-size:12px;color:var(--t2);line-height:1.75;}
+.d-body p{margin-bottom:10px;}
+.d-body strong{color:var(--t1);font-weight:500;}
+.tca{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+.tca-box{padding:10px 12px;border-radius:5px;background:var(--s2);border-left:2px solid transparent;}
+.tca-box.trigger{border-left-color:var(--purple);}
+.tca-box.condition{border-left-color:#EF9F27;}
+.tca-box.action{border-left-color:var(--teal);}
+.tca-lbl{font-size:8.5px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;}
+.tca-lbl.trigger{color:var(--purple-mid);}
+.tca-lbl.condition{color:#EF9F27;}
+.tca-lbl.action{color:var(--teal);}
+.tca-val{font-size:11.5px;color:var(--t2);line-height:1.5;}
+.d-list{list-style:none;display:flex;flex-direction:column;gap:5px;margin-bottom:12px;}
+.d-list li{display:flex;align-items:flex-start;gap:8px;font-size:11.5px;color:var(--t2);line-height:1.5;}
+.d-list li::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--purple-mid);flex-shrink:0;margin-top:6px;}
+.chip-row{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px;}
+.d-chip{font-size:10px;padding:2px 8px;border-radius:3px;background:var(--s3);border:1px solid var(--border);color:var(--t2);}
+.d-chip.key{border-color:rgba(83,74,183,0.35);color:var(--purple-mid);}
+.dep-alert{background:rgba(186,117,23,0.08);border:1px solid rgba(186,117,23,0.25);border-radius:5px;padding:10px 12px;margin-top:10px;}
+.dep-alert-label{font-size:8.5px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:#EF9F27;margin-bottom:4px;}
+.dep-alert-text{font-size:11px;color:var(--t2);line-height:1.5;}
+
+/* ── COLUMNS ── */
+.col-section-hdr{padding:7px 12px;border-radius:4px 4px 0 0;font-size:10px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;margin-top:18px;}
+.col-section-hdr.purple{background:var(--purple);color:#fff;}
+.col-section-hdr.teal{background:var(--teal);color:#fff;}
+.col-section-hdr.gray{background:var(--gray);color:#fff;}
+.col-section-hdr.amber{background:var(--amber);color:#fff;}
+.col-table{width:100%;border-collapse:collapse;font-size:11.5px;margin-bottom:4px;}
+.col-table thead tr{background:var(--s3);}
+.col-table thead th{padding:7px 10px;font-size:8.5px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);text-align:left;}
+.col-table tbody tr:nth-child(odd){background:var(--s1);}
+.col-table tbody tr:nth-child(even){background:var(--s2);}
+.col-table tbody tr:hover{background:var(--s3);}
+.col-table td{padding:7px 10px;vertical-align:top;border-bottom:1px solid var(--border);line-height:1.45;}
+.col-table td:first-child{font-weight:500;color:var(--t1);}
+.src-tag{display:inline-block;font-size:8.5px;font-weight:500;padding:1px 6px;border-radius:3px;}
+.src-sg{background:rgba(83,74,183,0.15);color:var(--purple-mid);}
+.src-mr{background:rgba(29,158,117,0.15);color:var(--teal);}
+.src-sc{background:rgba(186,117,23,0.15);color:#EF9F27;}
+.src-new{background:rgba(216,90,48,0.15);color:#F0997B;}
+.mirror-tag{display:inline-block;font-size:8.5px;padding:1px 5px;border-radius:3px;background:rgba(56,138,221,0.15);color:#85B7EB;margin:1px 2px 1px 0;}
+.note-italic{font-style:italic;color:var(--t3);font-size:10.5px;}
+
+/* ── AUTOMATIONS ── */
+.auto-card{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:10px;}
+.auto-card-hdr{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--s3);}
+.auto-card-hdr.workflow{background:rgba(29,158,117,0.12);border-bottom:1px solid rgba(29,158,117,0.2);}
+.auto-card-hdr.notify{background:var(--s2);border-bottom:1px solid var(--border);}
+.a-badge{font-size:8.5px;font-weight:500;letter-spacing:.07em;padding:3px 8px;border-radius:3px;white-space:nowrap;}
+.a-badge.stage{background:var(--purple);color:#fff;}
+.a-badge.watch{background:var(--coral);color:#fff;}
+.a-badge.event{background:var(--teal);color:#fff;}
+.a-badge.ent{background:rgba(29,158,117,0.25);color:var(--teal);border:1px solid rgba(29,158,117,0.4);}
+.a-badge.notif{background:var(--s3);color:var(--t2);border:1px solid var(--border2);}
+.a-label{font-size:12px;font-weight:500;color:var(--t1);flex:1;}
+.a-tca{display:grid;grid-template-columns:1fr 1fr 1.4fr;}
+.a-cell{padding:10px 14px;border-right:1px solid var(--border);}
+.a-cell:last-child{border-right:none;}
+.a-cell:nth-child(odd){background:var(--s1);}
+.a-cell:nth-child(even){background:var(--s2);}
+.a-cell:last-child{background:var(--s1);}
+.a-lbl{font-size:8.5px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;}
+.a-lbl.t{color:var(--purple-mid);}
+.a-lbl.c{color:#EF9F27;}
+.a-lbl.a{color:var(--teal);}
+.a-val{font-size:11.5px;color:var(--t2);line-height:1.5;}
+
+/* ── DEPENDENCY CARDS ── */
+.dep-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.dep-card{border:1px solid rgba(186,117,23,0.3);border-radius:8px;padding:14px 16px;background:rgba(186,117,23,0.06);}
+.dep-card-title{font-size:12.5px;font-weight:500;color:#EF9F27;margin-bottom:6px;}
+.dep-card-meta{display:flex;gap:14px;margin-bottom:8px;flex-wrap:wrap;}
+.dep-meta-field{font-size:10px;color:var(--t3);}
+.dep-meta-field strong{color:var(--t1);font-weight:500;}
+.dep-card-impact{font-size:11.5px;color:var(--t2);line-height:1.5;}
+
+/* ── TIMELINE ── */
+.timeline{display:flex;flex-direction:column;gap:0;}
+.tl-phase{margin-bottom:20px;}
+.tl-phase-hdr{display:flex;align-items:center;gap:12px;padding:10px 16px;border-radius:6px;margin-bottom:8px;}
+.tl-phase-hdr.p1{background:rgba(83,74,183,0.12);border:1px solid rgba(83,74,183,0.2);}
+.tl-phase-hdr.p2{background:rgba(29,158,117,0.1);border:1px solid rgba(29,158,117,0.2);}
+.tl-phase-hdr.p3{background:rgba(186,117,23,0.1);border:1px solid rgba(186,117,23,0.2);}
+.tl-phase-hdr.p4{background:rgba(216,90,48,0.1);border:1px solid rgba(216,90,48,0.2);}
+.tl-phase-name{font-family:var(--font-d);font-size:13px;font-weight:700;color:var(--t1);}
+.tl-phase-dates{font-size:10px;color:var(--t3);margin-left:auto;}
+.tl-phase-hrs{font-size:10px;font-weight:500;padding:2px 8px;border-radius:10px;background:var(--s3);color:var(--t2);}
+.tl-week{margin-left:16px;margin-bottom:6px;}
+.tl-week-label{font-size:10px;font-weight:500;color:var(--t3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px;padding-left:10px;border-left:2px solid var(--s3);}
+.tl-task{display:flex;align-items:flex-start;gap:10px;padding:7px 12px;border-radius:5px;border:1px solid var(--border);background:var(--s2);margin-bottom:3px;cursor:pointer;transition:border-color .15s;}
+.tl-task:hover{border-color:var(--border2);}
+.tl-task.done-t{opacity:.4;}
+.tl-cb{width:14px;height:14px;border-radius:3px;border:1px solid var(--border2);flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:9px;transition:background .15s;}
+.tl-cb.chk{background:var(--teal);border-color:var(--teal);color:#fff;}
+.tl-task-text{font-size:11.5px;color:var(--t2);flex:1;line-height:1.4;}
+.tl-task.done-t .tl-task-text{text-decoration:line-through;color:var(--t4);}
+.tl-task-date{font-size:10px;color:var(--t3);background:var(--s3);padding:1px 6px;border-radius:3px;white-space:nowrap;}
+.tl-task-date.tod{background:rgba(83,74,183,0.2);color:var(--purple-mid);}
+.tl-dep-tag{font-size:8.5px;font-weight:500;padding:1px 5px;border-radius:3px;background:rgba(186,117,23,0.15);color:#EF9F27;border:1px solid rgba(186,117,23,0.25);white-space:nowrap;}
+
+/* OVERVIEW */
+.board-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:28px;}
+.board-card{background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:18px 20px;cursor:pointer;transition:border-color .2s,transform .15s;}
+.board-card:hover{border-color:var(--border2);transform:translateY(-2px);}
+.board-card.built{border-left:3px solid var(--teal);}
+.board-card.building{border-left:3px solid var(--purple);}
+.board-card.pending{border-left:3px solid var(--s3);}
+.bc-status{font-size:9px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;}
+.bc-status.built{color:var(--teal);}
+.bc-status.building{color:var(--purple-mid);}
+.bc-status.pending{color:var(--t4);}
+.bc-name{font-family:var(--font-d);font-size:15px;font-weight:700;color:var(--t1);margin-bottom:4px;}
+.bc-desc{font-size:11px;color:var(--t3);line-height:1.5;}
+
+/* scrollbar */
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:2px;}
+
+@media(max-width:1000px){
+  .sidebar{width:180px;}
+  .main{margin-left:180px;}
+  .flow-wrap{grid-template-columns:1fr;}
+  .detail-panel{position:static;max-height:none;}
+  .stat-row{grid-template-columns:repeat(3,1fr);}
+  .board-cards{grid-template-columns:1fr;}
+  .a-tca{grid-template-columns:1fr;}
+  .a-cell{border-right:none;border-bottom:1px solid var(--border);}
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Evergreen Energy</h1>
+    <p>CarbonWeb · 2026</p>
+  </div>
+  <div class="nav-section">Overview</div>
+  <button class="nav-link active" onclick="nav('overview')"><span class="nav-dot purple"></span>Project overview</button>
+  <button class="nav-link" onclick="nav('tasks')"><span class="nav-dot amber"></span>All tasks</button>
+  <button class="nav-link" onclick="nav('timeline')"><span class="nav-dot teal"></span>Timeline</button>
+  <div class="nav-section">Boards</div>
+  <button class="nav-link" onclick="nav('pipeline')"><span class="nav-dot purple"></span>Pipeline board</button>
+  <button class="nav-link" onclick="nav('tranche')"><span class="nav-dot teal"></span>Tranche management</button>
+  <button class="nav-link" onclick="nav('commission')"><span class="nav-dot coral"></span>Commission tracking</button>
+  <button class="nav-link" onclick="nav('compliance')"><span class="nav-dot amber"></span>Post-PTO compliance</button>
+  <button class="nav-link" onclick="nav('dashboard')"><span class="nav-dot purple"></span>Dashboard</button>
+  <button class="nav-link" onclick="nav('om')"><span class="nav-dot gray"></span>O&amp;M foundation</button>
+  <div class="nav-section">Reference</div>
+  <button class="nav-link" onclick="nav('automations')"><span class="nav-dot coral"></span>All automations</button>
+  <button class="nav-link" onclick="nav('deps')"><span class="nav-dot amber"></span>Dependencies</button>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title" id="topbar-title">Project Overview</div>
+    <div class="topbar-meta">
+      <span class="status-chip live">Pipeline — Live</span>
+      <span class="status-chip live">Tranche — Live</span>
+      <span class="status-chip building">Commission — Building</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       OVERVIEW
+  ══════════════════════════════════════════ -->
+  <section class="page-section active" id="sec-overview">
+    <div class="sec-hdr">
+      <h2>Evergreen Energy Investments</h2>
+      <p>Residential solar lifecycle platform built on monday.com Enterprise. Replacing fragmented spreadsheets and a partner-owned workspace with a single connected system covering pipeline, funding, commissions, compliance, and management reporting.</p>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-card"><div class="stat-num purple">58</div><div class="stat-label">Total hours</div></div>
+      <div class="stat-card"><div class="stat-num teal">15</div><div class="stat-label">Weeks</div></div>
+      <div class="stat-card"><div class="stat-num amber">7</div><div class="stat-label">Boards</div></div>
+      <div class="stat-card"><div class="stat-num coral">8</div><div class="stat-label">Automations</div></div>
+      <div class="stat-card"><div class="stat-num purple">Jul 24</div><div class="stat-label">Go-live</div></div>
+    </div>
+
+    <div class="board-cards">
+      <div class="board-card built" onclick="nav('pipeline')">
+        <div class="bc-status built">✓ Built</div>
+        <div class="bc-name">Project Pipeline Board</div>
+        <div class="bc-desc">9 stages from Origination to PTO. Central spine — stage changes drive all automations across the platform.</div>
+      </div>
+      <div class="board-card built" onclick="nav('tranche')">
+        <div class="bc-status built">✓ Built</div>
+        <div class="bc-name">Tranche Management Board</div>
+        <div class="bc-desc">ATI and PTO funding batches. DocuGen auto-generates presentation documents for Sol Ridge, EPC, and FVC Bank.</div>
+      </div>
+      <div class="board-card building" onclick="nav('commission')">
+        <div class="bc-status building">Building next</div>
+        <div class="bc-name">Commission Tracking Board</div>
+        <div class="bc-desc">Pre-M1 ($750 flat), M1 (ATI), M2 (PTO). Four team structures. True-up logic for system size changes.</div>
+      </div>
+      <div class="board-card building" onclick="nav('compliance')">
+        <div class="bc-status building">Building</div>
+        <div class="bc-name">Post-PTO Compliance Board</div>
+        <div class="bc-desc">5 compliance tasks auto-created at PTO. DC-PSC, GATTS, UCC, EnSights, SREC with escalation reminders.</div>
+      </div>
+      <div class="board-card pending" onclick="nav('dashboard')">
+        <div class="bc-status pending">Pending</div>
+        <div class="bc-name">Management Dashboard</div>
+        <div class="bc-desc">Replaces 13-tab Excel report. Live KPIs, financial summary, tranche status, commission totals.</div>
+      </div>
+      <div class="board-card pending" onclick="nav('om')">
+        <div class="bc-status pending">Pending</div>
+        <div class="bc-name">O&amp;M Foundation Board</div>
+        <div class="bc-desc">Post-PTO asset tracking. Auto-created when PTO tranche funded. Annual review reminders.</div>
+      </div>
+    </div>
+
+    <div class="dep-grid">
+      <div class="dep-card">
+        <div class="dep-card-title">DocuGen license</div>
+        <div class="dep-card-meta"><div class="dep-meta-field">Owner: <strong>Evergreen</strong></div><div class="dep-meta-field">Deadline: <strong>Apr 28</strong></div></div>
+        <div class="dep-card-impact">Must be procured before Tranche document generation can be configured.</div>
+      </div>
+      <div class="dep-card">
+        <div class="dep-card-title">Commission matrices — Jack</div>
+        <div class="dep-card-meta"><div class="dep-meta-field">Owner: <strong>Jack / Evergreen</strong></div><div class="dep-meta-field">Deadline: <strong>May 7</strong></div></div>
+        <div class="dep-card-impact">Commission formula columns cannot be completed without rate matrices from Jack.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       TASKS
+  ══════════════════════════════════════════ -->
+  <section class="page-section" id="sec-tasks">
+    <div class="sec-hdr">
+      <h2>All Tasks</h2>
+      <p>Full task list across all 15 weeks. Start date Mar 16, 2026 · 4 hrs/week · Go-live Jul 24.</p>
+    </div>
+    <div class="progress-wrap">
+      <span style="font-size:11px;color:var(--t3)">Overall progress</span>
+      <div class="progress-bar"><div class="progress-fill" id="task-prog" style="width:0%"></div></div>
+      <span class="progress-label" id="task-prog-label">0 / 0 done</span>
+      <span class="progress-pct" id="task-prog-pct">0%</span>
+    </div>
+    <div id="task-container"></div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       TIMELINE
+  ══════════════════════════════════════════ -->
+  <section class="page-section" id="sec-timeline">
+    <div class="sec-hdr">
+      <h2>Project Timeline</h2>
+      <p>15 weeks · Mar 16 – Jul 24, 2026 · 4 hours per week</p>
+    </div>
+    <div id="timeline-container"></div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       PIPELINE BOARD
+  ══════════════════════════════════════════ -->
+  <section class="page-section" id="sec-pipeline">
+    <div class="sec-hdr">
+      <h2>Pipeline Board</h2>
+      <p>The central spine. Every project lives here. Stage status column drives all downstream automations. Click any stage to see details.</p>
+    </div>
+    <div class="flow-wrap">
+      <div>
+        <div style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--t4);margin-bottom:10px;">9 stage groups</div>
+        <div class="flow-stages" id="pipeline-stages"></div>
+        <div class="connector-v" style="margin:6px 0"><span>downstream boards</span></div>
+        <div class="ds-grid">
+          <div class="ds-card" onclick="selectDetail('board-commission')"><div class="ds-name">Commission tracking</div><div class="ds-desc">Pre-M1 · M1 · M2</div></div>
+          <div class="ds-card" onclick="selectDetail('board-tranche')"><div class="ds-name">Tranche management</div><div class="ds-desc">ATI + PTO batches</div></div>
+          <div class="ds-card" onclick="selectDetail('board-compliance-ds')"><div class="ds-name">Post-PTO compliance</div><div class="ds-desc">5 regulatory tasks</div></div>
+        </div>
+        <div class="dash-node" onclick="selectDetail('board-dashboard')">
+          <h3>Management Dashboard</h3>
+          <p>Live KPIs · financial summary · tranche status</p>
+        </div>
+        <div class="om-node" onclick="selectDetail('board-om-ds')">
+          <h3>O&amp;M Foundation</h3>
+          <p>Post-PTO asset tracking · annual reminders</p>
+        </div>
+      </div>
+      <div class="detail-panel" id="pipeline-detail">
+        <div class="empty"><p>Click any stage, automation, or board to see full documentation</p></div>
+      </div>
+    </div>
+
+    <div style="margin-top:36px">
+      <div class="sec-hdr"><h2 style="font-size:20px">Column Architecture</h2></div>
+      <div class="col-section-hdr purple">Core project columns</div>
+      <table class="col-table">
+        <thead><tr><th>Column</th><th>Type</th><th>Source</th><th>Mirrors to</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Project name</td><td>Item name</td><td><span class="src-tag src-sg">SolarGreen</span></td><td><span class="mirror-tag">Tranche</span><span class="mirror-tag">Commission</span></td><td></td></tr>
+          <tr><td>Stage status ⚡</td><td>Status</td><td><span class="src-tag src-sg">SolarGreen</span></td><td>Drives all automations</td><td class="note-italic">Key column</td></tr>
+          <tr><td>Homeowner name</td><td>Text</td><td><span class="src-tag src-sg">SolarGreen</span></td><td><span class="mirror-tag">Tranche</span></td><td></td></tr>
+          <tr><td>Address</td><td>Location</td><td><span class="src-tag src-sg">SolarGreen</span></td><td><span class="mirror-tag">Tranche</span></td><td></td></tr>
+          <tr><td>System size (kW)</td><td>Numbers</td><td><span class="src-tag src-sg">SolarGreen</span></td><td><span class="mirror-tag">Commission</span><span class="mirror-tag">Tranche</span></td><td class="note-italic">True-up watch</td></tr>
+          <tr><td>Cost per watt</td><td>Formula</td><td><span class="src-tag src-new">NEW</span></td><td><span class="mirror-tag">Tranche</span></td><td class="note-italic">Pricing engine output</td></tr>
+          <tr><td>Roof type</td><td>Dropdown</td><td><span class="src-tag src-sg">SolarGreen</span></td><td>Pricing input</td><td class="note-italic">Shingle/Tile/Flat/Metal</td></tr>
+          <tr><td>Yield</td><td>Numbers</td><td><span class="src-tag src-sg">SolarGreen</span></td><td><span class="mirror-tag">Tranche</span></td><td></td></tr>
+        </tbody>
+      </table>
+      <div class="col-section-hdr teal">Partner & origination</div>
+      <table class="col-table">
+        <thead><tr><th>Column</th><th>Type</th><th>Source</th><th>Mirrors to</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Origination partner</td><td>Dropdown</td><td><span class="src-tag src-sg">SolarGreen</span></td><td><span class="mirror-tag">Commission</span><span class="mirror-tag">Tranche</span></td><td class="note-italic">Sust. U / Pure Solar / DCEC</td></tr>
+          <tr><td>EPC partner</td><td>Dropdown</td><td><span class="src-tag src-sg">SolarGreen</span></td><td><span class="mirror-tag">Tranche</span></td><td></td></tr>
+          <tr><td>Partner config fields</td><td>Various</td><td><span class="src-tag src-sc">Scoop</span></td><td>Per-partner</td><td class="note-italic">Confirm with champion</td></tr>
+        </tbody>
+      </table>
+      <div class="col-section-hdr gray">Date columns</div>
+      <table class="col-table">
+        <thead><tr><th>Column</th><th>Type</th><th>Source</th><th>Mirrors to</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Lease signed date</td><td>Date</td><td><span class="src-tag src-sg">SolarGreen</span></td><td>EPC 5% ref</td><td></td></tr>
+          <tr><td>Aurora design date</td><td>Date</td><td><span class="src-tag src-sg">SolarGreen</span></td><td>Pricing eval #1</td><td></td></tr>
+          <tr><td>Site survey date</td><td>Date</td><td><span class="src-tag src-sg">SolarGreen</span></td><td>Pricing eval #2</td><td></td></tr>
+          <tr><td>ATI date</td><td>Date</td><td><span class="src-tag src-sg">SolarGreen</span></td><td><span class="mirror-tag">Tranche</span><span class="mirror-tag">Commission</span></td><td class="note-italic">Triggers Auto 1+3</td></tr>
+          <tr><td>Install start date</td><td>Date</td><td><span class="src-tag src-sg">SolarGreen</span></td><td>—</td><td></td></tr>
+          <tr><td>PTO date</td><td>Date</td><td><span class="src-tag src-sg">SolarGreen</span></td><td><span class="mirror-tag">Tranche</span><span class="mirror-tag">Compliance</span><span class="mirror-tag">O&M</span></td><td class="note-italic">Triggers Auto 2+6</td></tr>
+        </tbody>
+      </table>
+      <div class="col-section-hdr amber">Financial & tranche columns</div>
+      <table class="col-table">
+        <thead><tr><th>Column</th><th>Type</th><th>Source</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>EPC: 5% lease</td><td>Formula</td><td><span class="src-tag src-mr">Mgmt Report</span></td><td class="note-italic">= system cost × 0.05</td></tr>
+          <tr><td>EPC: 55% ATI</td><td>Formula</td><td><span class="src-tag src-mr">Mgmt Report</span></td><td class="note-italic">= system cost × 0.55</td></tr>
+          <tr><td>EPC: 40% PTO</td><td>Formula</td><td><span class="src-tag src-mr">Mgmt Report</span></td><td class="note-italic">= system cost × 0.40</td></tr>
+          <tr><td>Orig: 50% ATI</td><td>Formula</td><td><span class="src-tag src-mr">Mgmt Report</span></td><td class="note-italic">Origination payout at ATI</td></tr>
+          <tr><td>Orig: 50% PTO</td><td>Formula</td><td><span class="src-tag src-mr">Mgmt Report</span></td><td class="note-italic">Origination payout at PTO</td></tr>
+          <tr><td>Historical ATI tranche</td><td>Text</td><td><span class="src-tag src-new">NEW</span></td><td class="note-italic">Permanent audit trail. Never overwrite.</td></tr>
+          <tr><td>Tranche eligibility flag</td><td>Status</td><td><span class="src-tag src-new">NEW</span></td><td class="note-italic">Unassigned ATI / Unassigned PTO / Assigned / Funded</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       TRANCHE
+  ══════════════════════════════════════════ -->
+  <section class="page-section" id="sec-tranche">
+    <div class="sec-hdr">
+      <h2>Tranche Management Board</h2>
+      <p>How Evergreen gets paid. Projects batched into ATI and PTO funding requests. DocuGen auto-generates the presentation document per tranche.</p>
+    </div>
+    <div class="stat-row" style="grid-template-columns:repeat(4,1fr)">
+      <div class="stat-card"><div class="stat-num teal">4</div><div class="stat-label">Board groups</div></div>
+      <div class="stat-card"><div class="stat-num purple">2</div><div class="stat-label">Tranche types</div></div>
+      <div class="stat-card"><div class="stat-num amber">3</div><div class="stat-label">DocuGen variants</div></div>
+      <div class="stat-card"><div class="stat-num coral">11</div><div class="stat-label">Mirror columns</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px">
+      <div style="padding:14px;background:var(--s2);border:1px solid rgba(29,158,117,0.3);border-radius:8px">
+        <div style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:8px">4 board groups</div>
+        <div style="display:flex;flex-direction:column;gap:5px">
+          <div style="padding:6px 10px;background:rgba(29,158,117,0.1);border-radius:4px;font-size:11.5px;color:var(--t1)">Active tranches <span style="color:var(--t3);font-size:10px">— being assembled</span></div>
+          <div style="padding:6px 10px;background:var(--s3);border-radius:4px;font-size:11.5px;color:var(--t2)">Submitted <span style="color:var(--t3);font-size:10px">— sent to partner</span></div>
+          <div style="padding:6px 10px;background:rgba(83,74,183,0.1);border-radius:4px;font-size:11.5px;color:var(--t1)">Funded <span style="color:var(--t3);font-size:10px">— draw received</span></div>
+          <div style="padding:6px 10px;background:var(--s2);border-radius:4px;font-size:11.5px;color:var(--t3)">Archived <span style="color:var(--t4);font-size:10px">— historical</span></div>
+        </div>
+      </div>
+      <div style="padding:14px;background:var(--s2);border:1px solid rgba(186,117,23,0.3);border-radius:8px">
+        <div style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#EF9F27;margin-bottom:8px">3 DocuGen variants</div>
+        <div style="display:flex;flex-direction:column;gap:5px">
+          <div style="padding:8px 10px;background:rgba(83,74,183,0.1);border-radius:4px;font-size:11.5px;color:var(--t1)">Sol Ridge <span style="color:var(--t3);font-size:10px">— tax equity</span></div>
+          <div style="padding:8px 10px;background:rgba(29,158,117,0.1);border-radius:4px;font-size:11.5px;color:var(--t1)">EPC partner <span style="color:var(--t3);font-size:10px">— construction debt</span></div>
+          <div style="padding:8px 10px;background:rgba(216,90,48,0.1);border-radius:4px;font-size:11.5px;color:var(--t1)">FVC Bank <span style="color:var(--t3);font-size:10px">— line of credit</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-section-hdr teal">Parent item columns — tranche level</div>
+    <table class="col-table">
+      <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Tranche name</td><td>Item name</td><td class="note-italic">e.g. "ATI Tranche 07" — sequential naming</td></tr>
+        <tr><td>Tranche type</td><td>Status</td><td class="note-italic">ATI or PTO — distinguishes type on single board</td></tr>
+        <tr><td>Funding partner</td><td>Dropdown</td><td class="note-italic">Sol Ridge / EPC partner / FVC Bank</td></tr>
+        <tr><td>Target dollar amount</td><td>Numbers</td><td class="note-italic">Set by management at creation</td></tr>
+        <tr><td>Draw amount</td><td>Numbers</td><td class="note-italic">Actual confirmed draw from partner</td></tr>
+        <tr><td>Project count</td><td>Formula</td><td class="note-italic">= COUNT of subitems</td></tr>
+        <tr><td>Total system size (kW)</td><td>Formula</td><td class="note-italic">= SUM of subitem system sizes</td></tr>
+        <tr><td>Submission date</td><td>Date</td><td></td></tr>
+        <tr><td>Approval date</td><td>Date</td><td></td></tr>
+        <tr><td>Funding date</td><td>Date</td><td class="note-italic">Triggers downstream pipeline updates</td></tr>
+        <tr><td>Tranche status</td><td>Status</td><td class="note-italic">Assembling / Submitted / Approved / Funded</td></tr>
+      </tbody>
+    </table>
+    <div class="col-section-hdr purple">Subitem columns — project level (mirrored from Pipeline)</div>
+    <table class="col-table">
+      <thead><tr><th>Column</th><th>Type</th><th>Source</th></tr></thead>
+      <tbody>
+        <tr><td>Pipeline connection</td><td>Connect boards</td><td class="note-italic">Auto-connected by Enterprise Workflow EW1</td></tr>
+        <tr><td>Homeowner name</td><td>Mirror</td><td><span class="mirror-tag">Pipeline</span></td></tr>
+        <tr><td>Address</td><td>Mirror</td><td><span class="mirror-tag">Pipeline</span></td></tr>
+        <tr><td>System size (kW)</td><td>Mirror</td><td><span class="mirror-tag">Pipeline</span> <span class="note-italic">live — updates if changed</span></td></tr>
+        <tr><td>Cost per watt</td><td>Mirror</td><td><span class="mirror-tag">Pipeline</span></td></tr>
+        <tr><td>EPC partner</td><td>Mirror</td><td><span class="mirror-tag">Pipeline</span></td></tr>
+        <tr><td>Origination partner</td><td>Mirror</td><td><span class="mirror-tag">Pipeline</span></td></tr>
+        <tr><td>Roof type</td><td>Mirror</td><td><span class="mirror-tag">Pipeline</span></td></tr>
+        <tr><td>Yield</td><td>Mirror</td><td><span class="mirror-tag">Pipeline</span></td></tr>
+        <tr><td>ATI date</td><td>Mirror</td><td><span class="mirror-tag">Pipeline</span></td></tr>
+        <tr><td>PTO date</td><td>Mirror</td><td><span class="mirror-tag">Pipeline</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Commission, Compliance, Dashboard, O&M — brief specs -->
+  <section class="page-section" id="sec-commission">
+    <div class="sec-hdr"><h2>Commission Tracking Board</h2><p>Three milestone payments · four team rate structures · true-up logic for system size changes · pending commission matrices from Jack.</p></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px">
+      <div style="padding:14px;background:var(--s2);border:1px solid var(--border);border-radius:8px"><div style="font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--t4);margin-bottom:8px">Pre-M1</div><div style="font-family:var(--font-d);font-size:22px;font-weight:900;color:var(--coral)">$750</div><div style="font-size:10px;color:var(--t3);margin-top:4px">Flat · at project approval · Auto 4</div></div>
+      <div style="padding:14px;background:var(--s2);border:1px solid var(--border);border-radius:8px"><div style="font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--t4);margin-bottom:8px">M1 — ATI</div><div style="font-family:var(--font-d);font-size:22px;font-weight:900;color:var(--purple-mid)">PPW × kW</div><div style="font-size:10px;color:var(--t3);margin-top:4px">Rate matrix × system size · Auto 1</div></div>
+      <div style="padding:14px;background:var(--s2);border:1px solid var(--border);border-radius:8px"><div style="font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--t4);margin-bottom:8px">M2 — PTO</div><div style="font-family:var(--font-d);font-size:22px;font-weight:900;color:var(--teal)">Remainder</div><div style="font-size:10px;color:var(--t3);margin-top:4px">Total commission minus M1 · Auto 2</div></div>
+    </div>
+    <div class="dep-card"><div class="dep-card-title">Commission rate matrices — Jack</div><div class="dep-card-meta"><div class="dep-meta-field">Owner: <strong>Jack / Evergreen</strong></div><div class="dep-meta-field">Deadline: <strong>May 7</strong></div></div><div class="dep-card-impact">Four team structures (Sustainable U, Pure Solar, DCEC, Internal). Board structure and milestone types can be built. Formula columns stay empty until matrix received.</div></div>
+  </section>
+
+  <section class="page-section" id="sec-compliance">
+    <div class="sec-hdr"><h2>Post-PTO Compliance Board</h2><p>5 regulatory tasks auto-created the moment a project hits PTO. Escalation reminders prevent anything falling through the cracks.</p></div>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <div style="padding:12px 16px;background:var(--s2);border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;gap:14px"><div style="width:8px;height:8px;border-radius:50%;background:var(--purple);flex-shrink:0"></div><div><div style="font-size:13px;font-weight:500;color:var(--t1)">DC-PSC filing</div><div style="font-size:10px;color:var(--t3)">DC Public Service Commission registration</div></div></div>
+      <div style="padding:12px 16px;background:var(--s2);border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;gap:14px"><div style="width:8px;height:8px;border-radius:50%;background:var(--teal);flex-shrink:0"></div><div><div style="font-size:13px;font-weight:500;color:var(--t1)">GATTS registration</div><div style="font-size:10px;color:var(--t3)">Generation Attribute Tracking System</div></div></div>
+      <div style="padding:12px 16px;background:var(--s2);border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;gap:14px"><div style="width:8px;height:8px;border-radius:50%;background:var(--amber);flex-shrink:0"></div><div><div style="font-size:13px;font-weight:500;color:var(--t1)">UCC lien filing</div><div style="font-size:10px;color:var(--t3)">Uniform Commercial Code lien registration</div></div></div>
+      <div style="padding:12px 16px;background:var(--s2);border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;gap:14px"><div style="width:8px;height:8px;border-radius:50%;background:var(--coral);flex-shrink:0"></div><div><div style="font-size:13px;font-weight:500;color:var(--t1)">EnSights registration</div><div style="font-size:10px;color:var(--t3)">Production monitoring system</div></div></div>
+      <div style="padding:12px 16px;background:var(--s2);border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;gap:14px"><div style="width:8px;height:8px;border-radius:50%;background:var(--purple-mid);flex-shrink:0"></div><div><div style="font-size:13px;font-weight:500;color:var(--t1)">SREC management</div><div style="font-size:10px;color:var(--t3)">Solar Renewable Energy Certificate</div></div></div>
+    </div>
+  </section>
+
+  <section class="page-section" id="sec-dashboard">
+    <div class="sec-hdr"><h2>Management Dashboard</h2><p>Replaces the manually compiled 13-tab Excel management report. Live data — no manual assembly.</p></div>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px">
+      <div style="padding:14px;background:var(--s2);border:1px solid var(--border);border-radius:8px"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--t4);margin-bottom:8px">Pipeline KPIs</div><div style="font-size:12px;color:var(--t2);line-height:1.7">Total systems · Total kW capacity · Avg system size · Yield metrics · Active tranche count</div></div>
+      <div style="padding:14px;background:var(--s2);border:1px solid var(--border);border-radius:8px"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--t4);margin-bottom:8px">Financial summary</div><div style="font-size:12px;color:var(--t2);line-height:1.7">FVC Debt balance · Sol Ridge ATI draws · Sol Ridge PTO draws</div></div>
+      <div style="padding:14px;background:var(--s2);border:1px solid var(--border);border-radius:8px"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--t4);margin-bottom:8px">Stage distribution</div><div style="font-size:12px;color:var(--t2);line-height:1.7">Project counts per stage: Survey · Design · Permitting · ATI · Installation · PTO</div></div>
+      <div style="padding:14px;background:var(--s2);border:1px solid var(--border);border-radius:8px"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--t4);margin-bottom:8px">Commission summary</div><div style="font-size:12px;color:var(--t2);line-height:1.7">Bi-weekly payout totals · Per-team breakdowns</div></div>
+    </div>
+  </section>
+
+  <section class="page-section" id="sec-om">
+    <div class="sec-hdr"><h2>O&amp;M Foundation Board</h2><p>Post-PTO asset tracking. Phase 1 foundation only — expanded workflows in Phase 2.</p></div>
+    <div style="padding:16px;background:var(--s2);border:1px solid var(--border);border-radius:8px;max-width:520px">
+      <div style="font-size:12px;color:var(--t2);line-height:1.75"><p>Items are auto-created by <strong>Auto 6</strong> when a project's Tranche Eligibility Flag changes to Funded.</p><p>Annual performance review reminders fire automatically at <strong>PTO date + 365 days</strong>.</p><p style="color:var(--t3)">Scoop integration, EnSights production monitoring, and expanded O&M workflows are all Phase 2 scope.</p></div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       ALL AUTOMATIONS
+  ══════════════════════════════════════════ -->
+  <section class="page-section" id="sec-automations">
+    <div class="sec-hdr"><h2>All Automations</h2><p>8 automations total — 6 stage-change, 2 notifications. All built natively in monday.com unless noted.</p></div>
+    <div id="auto-container"></div>
+  </section>
+
+  <!-- DEPENDENCIES -->
+  <section class="page-section" id="sec-deps">
+    <div class="sec-hdr"><h2>Open Dependencies</h2><p>Four items that will block or delay parts of the build. Chase these in parallel with the build — don't wait.</p></div>
+    <div class="dep-grid">
+      <div class="dep-card"><div class="dep-card-title">Commission rate matrices — Jack</div><div class="dep-card-meta"><div class="dep-meta-field">Owner: <strong>Evergreen — Jack</strong></div><div class="dep-meta-field">Deadline: <strong>May 7</strong></div></div><div class="dep-card-impact">Commission formula columns cannot be completed. Board structure and milestones can be built but formulas stay empty until received.</div></div>
+      <div class="dep-card"><div class="dep-card-title">DocuGen license procurement</div><div class="dep-card-meta"><div class="dep-meta-field">Owner: <strong>Evergreen</strong></div><div class="dep-meta-field">Deadline: <strong>Apr 28</strong></div></div><div class="dep-card-impact">Tranche document generation cannot be configured. Board structure is unblocked — only DocuGen integration is blocked.</div></div>
+      <div class="dep-card"><div class="dep-card-title">Partner config field list — Scoop</div><div class="dep-card-meta"><div class="dep-meta-field">Owner: <strong>Evergreen champion</strong></div><div class="dep-meta-field">Deadline: <strong>Mar 23</strong></div></div><div class="dep-card-impact">Per-partner field columns cannot be finalised. Confirm during Week 1.</div></div>
+      <div class="dep-card"><div class="dep-card-title">Pricing formula complexity decision</div><div class="dep-card-meta"><div class="dep-meta-field">Owner: <strong>CarbonWeb SA</strong></div><div class="dep-meta-field">Deadline: <strong>Apr 13</strong></div></div><div class="dep-card-impact">If Make.com needed for nested pricing logic, a change order may be required. Evaluate Fund Active T7 + ROI sheet during Weeks 4–5.</div></div>
+    </div>
+  </section>
+
+</div><!-- /main -->
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────
+
+const stageData = {
+  origination:{tag:'Stage 1',tc:'stage',title:'Origination',sub:'Project enters system · pure data entry · no automations',body:`<p>The project item is created and core fields populated. Most important field at this stage is the <strong>origination partner</strong> — determines commission rate matrix, per-partner field config, and payout calculations for the entire project lifecycle.</p><p>No automations fire here. Intake only.</p>`,type:'body'},
+  aurora:{tag:'Stage 2',tc:'stage',title:'Aurora Design',sub:'System designed · pricing evaluation #1 runs',body:`<p>Aurora system design is produced. The first pricing evaluation runs — system size, roof type, and origination partner feed into the pricing engine to produce an initial <strong>cost per watt</strong>. This is preliminary and gets re-evaluated post-survey.</p>`,type:'body'},
+  survey:{tag:'Stage 3',tc:'stage',title:'Site Survey',sub:'Physical site assessed · pricing eval #2 with actual costs',body:`<p>Physical site is checked. Actual roof conditions confirmed. Second pricing evaluation runs with real numbers — updating cost per watt from the preliminary Aurora estimate. This is the definitive CPW used in Tranche and Commission boards.</p>`,type:'body'},
+  'fin-analysis':{tag:'Stage 4',tc:'stage',title:'Financial Analysis',sub:'Approval + Auto 4 fires — Pre-M1 $750 created',tca:{trigger:'Stage status changes to Financial analysis OR approval status = Approved',condition:'Origination partner is assigned',action:'Create Pre-M1 item in Commission Tracking board. Set milestone = Pre-M1. Amount = $750 flat — hardcoded, no formula.'},type:'tca'},
+  'compliance-check':{tag:'Stage 5',tc:'stage',title:'Compliance Check',sub:'Pre-permit regulatory review · internal only',body:`<p>Internal pre-permit regulatory review. No automations fire. Team checks compliance requirements for the project's jurisdiction before moving to permitting.</p>`,type:'body'},
+  permitting:{tag:'Stage 6',tc:'stage',title:'Permitting',sub:'Applications submitted · track permit dates',body:`<p>Permit applications are submitted and tracked. No automations fire. Projects stay here until permits are in hand, then move to ATI.</p>`,type:'body'},
+  ati:{tag:'Stage 7 — Key node',tc:'auto',title:'ATI',sub:'3 automations fire simultaneously on stage change',body:`<p>First major funding milestone. Three automations fire at once — commission tracking initiated, project flagged for tranche assignment, system size watch activated.</p>`,type:'body'},
+  auto1:{tag:'Auto 1',tc:'auto',title:'M1 Commission — ATI',sub:'Fires when project reaches ATI',tca:{trigger:'Stage status changes to ATI',condition:'Origination partner is assigned on the item',action:'Create item in Commission Tracking board. Map: project name, system size, origination partner, ATI date, EPC partner. Set milestone = M1.'},type:'tca'},
+  auto3:{tag:'Auto 3',tc:'auto',title:'Tranche Flag — ATI',sub:'Flags project for ATI tranche assignment',tca:{trigger:'Stage status changes to ATI',condition:'No connected tranche subitem exists for this item',action:'Set Tranche eligibility flag = Unassigned ATI. Item appears in Unassigned ATI pre-saved view for management to batch.'},type:'tca'},
+  auto5:{tag:'Auto 5',tc:'auto',title:'System Size Watch',sub:'True-up protection post-ATI',tca:{trigger:'System size (kW) column value changes on any item',condition:'M1 commission item already exists (ATI milestone passed)',action:'Notify SA + team. Update mirror column on Commission board. Flag true-up recalculation needed.'},type:'tca'},
+  installation:{tag:'Stage 8',tc:'stage',title:'Installation',sub:'Panels going up · track install dates · no automations',body:`<p>Physical installation of solar panels. Install start date tracked. No automations fire. Project moves to PTO when utility grants Permission to Operate.</p>`,type:'body'},
+  pto:{tag:'Stage 9 — Key node',tc:'auto',title:'PTO',sub:'3 automations fire — biggest burst in the system',body:`<p>Permission to Operate granted. Largest automation event in the platform — three downstream actions fire simultaneously across three different boards.</p>`,type:'body'},
+  'auto2-compliance':{tag:'Auto 2',tc:'auto',title:'5 Compliance Tasks at PTO',sub:'All 5 regulatory tasks auto-created',tca:{trigger:'Stage status changes to PTO',condition:'PTO date column is not empty',action:'Create 5 items in Post-PTO Compliance board: DC-PSC, GATTS, UCC lien, EnSights, SREC. Each gets status tracking, accountability columns, and due date fields.'},type:'tca'},
+  'auto2-commission':{tag:'Auto 2',tc:'auto',title:'M2 Commission Eligible',sub:'Final commission milestone flagged',tca:{trigger:'Stage status changes to PTO',condition:'PTO date column is not empty',action:'Update commission item status to M2 eligible on Commission Tracking board. M2 = total commission minus M1 paid.'},type:'tca'},
+  'auto2-tranche':{tag:'Auto 2',tc:'auto',title:'PTO Tranche Flag',sub:'Project queued for PTO tranche',tca:{trigger:'Stage status changes to PTO',condition:'PTO date column is not empty',action:'Set Tranche eligibility flag = Unassigned PTO. Project appears in Unassigned PTO view for management to batch into PTO tranche.'},type:'tca'},
+  'board-commission':{tag:'Board',tc:'board',title:'Commission Tracking',sub:'Pre-M1 · M1 · M2 milestone payments',body:`<p>Auto-created items per project at each milestone. Four team structures: Sustainable U, Pure Solar, DCEC, Internal. True-up logic recalculates if system size changes after M1.</p>`,type:'body'},
+  'board-tranche':{tag:'Board',tc:'board',title:'Tranche Management',sub:'ATI + PTO funding batches · DocuGen docs',body:`<p>Projects batched into funding requests. DocuGen generates the full funding presentation document per tranche. Three funding partner variants.</p>`,type:'body'},
+  'board-compliance-ds':{tag:'Board',tc:'board',title:'Post-PTO Compliance',sub:'DC-PSC · GATTS · UCC · EnSights · SREC',body:`<p>5 compliance tasks auto-created at PTO by Auto 2. Escalation notifications fire for overdue items. Tracking only — no direct government agency integration in Phase 1.</p>`,type:'body'},
+  'board-dashboard':{tag:'Board',tc:'board',title:'Management Dashboard',sub:'Replaces 13-tab Excel report',body:`<p>Live KPIs pulling from all boards. Pipeline stage distribution, financial summary (FVC balance, Sol Ridge draws), tranche status visuals, bi-weekly commission totals. Always up to date.</p>`,type:'body'},
+  'board-om-ds':{tag:'Board',tc:'board',title:'O&M Foundation',sub:'Post-PTO asset tracking · Phase 1 base',body:`<p>Auto-created by Auto 6 when PTO tranche is funded. Annual review reminders = PTO date + 365 days. Phase 1 foundation only — Scoop and EnSights integrations are Phase 2.</p>`,type:'body'},
+};
+
+const pipelineStages = [
+  {id:'origination',n:'1',title:'Origination',sub:'Partner logged',tags:[]},
+  {id:'aurora',n:'2',title:'Aurora design',sub:'Pricing eval #1',tags:[{l:'Pricing',c:'amber'}]},
+  {id:'survey',n:'3',title:'Site survey',sub:'Pricing eval #2',tags:[{l:'Pricing',c:'amber'}]},
+  {id:'fin-analysis',n:'4',title:'Financial analysis',sub:'Pre-M1 fires',tags:[{l:'Auto 4',c:'red'}]},
+  {id:'compliance-check',n:'5',title:'Compliance check',sub:'Pre-permit review',tags:[]},
+  {id:'permitting',n:'6',title:'Permitting',sub:'Applications live',tags:[]},
+  {id:'ati',n:'7',title:'ATI',sub:'3 automations fire',tags:[{l:'Auto 1',c:'red'},{l:'Auto 3',c:'red'},{l:'Auto 5',c:'red'}],key:true},
+  {id:'installation',n:'8',title:'Installation',sub:'Panels going up',tags:[]},
+  {id:'pto',n:'9',title:'PTO',sub:'3 automations fire',tags:[{l:'Auto 2',c:'red'},{l:'Auto 6',c:'red'}],key:true},
+];
+
+const autoData = [
+  {badge:'Auto 1',bclass:'stage',label:'ATI stage reached — create M1 commission item',trigger:'Stage status changes to ATI',condition:'Origination partner is assigned on the item',action:'Create item in Commission Tracking board. Map: project name, system size, origination partner, ATI date, EPC partner. Set milestone = M1.'},
+  {badge:'Auto 2',bclass:'stage',label:'PTO stage reached — M2 commission + 5 compliance tasks + PTO tranche flag',trigger:'Stage status changes to PTO',condition:'PTO date column is not empty',action:'1. Update commission item → M2 eligible. 2. Create 5 items in Post-PTO Compliance board (DC-PSC, GATTS, UCC, EnSights, SREC). 3. Set Tranche eligibility = Unassigned PTO.'},
+  {badge:'Auto 3',bclass:'stage',label:'ATI stage reached — flag for tranche assignment',trigger:'Stage status changes to ATI',condition:'No connected tranche subitem exists for this item',action:'Set Tranche eligibility flag = Unassigned ATI. Item appears in Unassigned ATI pre-saved view.'},
+  {badge:'Auto 4',bclass:'stage',label:'Project approved — Pre-M1 commission $750 flat',trigger:'Stage status changes to Financial analysis OR approval status = Approved',condition:'Origination partner is assigned',action:'Create Pre-M1 item in Commission Tracking board. Set milestone = Pre-M1. Amount = $750 flat — hardcoded.'},
+  {badge:'Auto 5',bclass:'watch',label:'System size change — commission true-up alert',trigger:'System size (kW) column value changes on any Pipeline item',condition:'M1 commission item already exists — ATI milestone has passed',action:'Notify SA + team. Update mirror column on Commission board. Flag true-up recalculation needed on commission item.'},
+  {badge:'Auto 6',bclass:'event',label:'PTO tranche funded — create O&M asset item',trigger:'Tranche eligibility flag changes to Funded',condition:'PTO date is set AND Historical ATI Tranche column is not empty',action:'Create item in O&M Foundation board. Map: homeowner, address, system size, PTO date. Set annual review reminder = PTO date + 365 days.'},
+  {badge:'EW1',bclass:'ent',label:'Subitem added — auto-connect to Pipeline project (Enterprise Workflow)',trigger:'Subitem manually created under a tranche parent item',condition:'Subitem name matches a Pipeline board item (matching field TBD during build)',action:'Connect subitem to Pipeline item. Mirror columns auto-populate: homeowner, address, system size, CPW, partners, roof type, yield, dates. Update Pipeline Tranche eligibility = Assigned.'},
+  {badge:'Notify N1',bclass:'notif',label:'Tranche submitted — notify team',trigger:'Tranche status changes to Submitted',condition:'Submission date is set',action:'Notify SA + management. Include: tranche name, type, funding partner, project count, target $ amount, submission date.'},
+  {badge:'Notify N2',bclass:'notif',label:'Compliance task overdue — escalation',trigger:'Date arrives on due date column on a Compliance board item',condition:'Compliance item status is not Complete',action:'Send escalation to item owner + manager. Repeat every 3 days until status = Complete.'},
+];
+
+const allTasks = [
+  {phase:'Phase 1 — Kickoff',pclass:'p1',weeks:[
+    {label:'Week 1 · Mar 16–20 · Kickoff',tasks:[
+      {t:'Run kickoff meeting — confirm champion, access, file ownership, cadence',d:'Mar 16',today:true},
+      {t:'Read full SOW end to end — flag ambiguities before build',d:'Mar 17'},
+      {t:'Review all 6 reference files (SolarGreen, Mgmt Report, pricing sheets, tranche templates)',d:'Mar 17'},
+      {t:'Create shared client project board in monday.com',d:'Mar 17'},
+      {t:'Sync with SE — full handover notes',d:'Mar 17'},
+      {t:'Confirm admin access to client monday.com',d:'Mar 18'},
+      {t:'Establish weekly meeting cadence with client',d:'Mar 19'},
+      {t:'Flag DocuGen license + Jack commission matrix as open dependencies',d:'Mar 19',dep:true},
+      {t:'Send Week 1 recap to client',d:'Mar 20',out:true},
+    ]}
+  ]},
+  {phase:'Phase 2 — Build',pclass:'p2',weeks:[
+    {label:'Weeks 2–3 · Mar 23–Apr 3 · Pipeline Board (6 hrs)',tasks:[
+      {t:'Import SolarGreen workspace (452 items, 50 columns) as reference baseline',d:'Mar 23'},
+      {t:'Build 9 stage-based groups: Origination → PTO',d:'Mar 24'},
+      {t:'Configure full column architecture (SolarGreen + Mgmt Report + Scoop)',d:'Mar 25'},
+      {t:'Set up per-partner tracking (Sustainable U, Pure Solar, DCEC)',d:'Mar 26'},
+      {t:'Build pre-saved views: Unassigned ATI + Unassigned PTO',d:'Mar 27'},
+      {t:'Add Historical ATI Tranche text column',d:'Mar 30'},
+      {t:'Configure all 6 stage-change automations',d:'Mar 31'},
+      {t:'Set up EPC + origination money milestone columns',d:'Apr 1'},
+    ]},
+    {label:'Weeks 4–5 · Apr 6–17 · Pricing Engine (8 hrs)',tasks:[
+      {t:'Replicate Fund Active Pricing T7 in monday.com formula columns',d:'Apr 6'},
+      {t:'Replicate ROI Pricing Sheet logic',d:'Apr 7'},
+      {t:'Build 3 input fields: system size, roof type, partner',d:'Apr 8'},
+      {t:'Configure dual evaluation points (Aurora + post-survey)',d:'Apr 9'},
+      {t:'Set up Captain Power vs ROI partner pricing tables',d:'Apr 10'},
+      {t:'Evaluate formula complexity — scope Make.com if needed',d:'Apr 13',dep:true},
+      {t:'Test pricing outputs against source Excel files',d:'Apr 16'},
+    ]},
+    {label:'Weeks 6–8 · Apr 20–May 1 · Tranche Management (8 hrs)',tasks:[
+      {t:'Create Tranche Management board with 4 groups',d:'Apr 20'},
+      {t:'Configure parent item structure (Tranche Type, Partner, Target $, dates)',d:'Apr 21'},
+      {t:'Add projects as subitems with connected board column to Pipeline',d:'Apr 22'},
+      {t:'Set up 11 mirror columns on subitems',d:'Apr 23'},
+      {t:'Configure sequential tranche logic + Historical ATI Tranche logging',d:'Apr 24'},
+      {t:'Build Enterprise Workflow EW1 — auto-connect subitem to Pipeline',d:'Apr 27'},
+      {t:'DocuGen integration — configure per-tranche document generation',d:'Apr 28',dep:true},
+      {t:'Configure 3 funding partner document variants',d:'Apr 29'},
+      {t:'Set up tranche notification automations',d:'Apr 30'},
+    ]},
+    {label:'Weeks 8–9 · May 4–15 · Commission Tracking (6 hrs)',tasks:[
+      {t:'Create Commission Tracking board connected to Pipeline',d:'May 4'},
+      {t:'Configure Pre-M1, M1, M2 milestone types',d:'May 5'},
+      {t:'Build 4 team rate matrix structures',d:'May 6'},
+      {t:'Build formula columns for per-milestone calculations (needs Jack matrix)',d:'May 7',dep:true},
+      {t:'Configure true-up logic for system size changes between M1 and M2',d:'May 11'},
+      {t:'Set up bi-weekly payment run view',d:'May 13'},
+    ]},
+    {label:'Weeks 10–11 · May 18–29 · Post-PTO Compliance (4 hrs)',tasks:[
+      {t:'Create Post-PTO Compliance board',d:'May 18'},
+      {t:'Configure 5 compliance workflows (DC-PSC, GATTS, UCC, EnSights, SREC)',d:'May 19'},
+      {t:'Add status + date tracking columns per registration type',d:'May 21'},
+      {t:'Set up reminder + escalation automations',d:'May 26'},
+    ]},
+    {label:'Weeks 11–12 · Jun 1–12 · Management Dashboard (6 hrs)',tasks:[
+      {t:'Build real-time dashboard replacing 13-tab Excel',d:'Jun 1'},
+      {t:'Pipeline KPI widgets',d:'Jun 2'},
+      {t:'Stage distribution widget',d:'Jun 3'},
+      {t:'Financial summary widgets (FVC, Sol Ridge)',d:'Jun 4'},
+      {t:'Tranche status + commission summary widgets',d:'Jun 9'},
+    ]},
+    {label:'Week 13 · Jun 15–19 · O&M Foundation (2 hrs)',tasks:[
+      {t:'Create O&M Foundation board',d:'Jun 15'},
+      {t:'Configure annual performance review automation',d:'Jun 16'},
+      {t:'Add base columns: production monitoring, maintenance, homeowner comms',d:'Jun 17'},
+    ]},
+  ]},
+  {phase:'Phase 3 — Documentation',pclass:'p3',weeks:[
+    {label:'Weeks 14–15 · Jun 22–Jul 3 · Documentation (6 hrs)',tasks:[
+      {t:'Create Admin/Champion mondayDoc with Loom walkthroughs',d:'Jun 22'},
+      {t:'Create Internal API Doc (Make.com + error handling)',d:'Jun 24'},
+      {t:'Create End-User How-To mondayDoc with Loom recordings',d:'Jun 29'},
+      {t:'Embed all docs in client monday.com account',d:'Jul 1'},
+    ]}
+  ]},
+  {phase:'Phase 4 — Testing & Go-Live',pclass:'p4',weeks:[
+    {label:'Weeks 15–17 · Jul 6–24 · Testing & Go-Live (8 hrs)',tasks:[
+      {t:'Build test cases for all 7 board components',d:'Jul 6'},
+      {t:'Test edge cases: system size changes, tranche transitions, true-ups',d:'Jul 7'},
+      {t:'Internal CW team testing pass',d:'Jul 9'},
+      {t:'Fix bugs within scope',d:'Jul 13'},
+      {t:'Deploy feedback form board in client account',d:'Jul 17'},
+      {t:'Go-live — SA retained on-call for live adoption',d:'Jul 20'},
+      {t:'Final wrap + scope confirmation',d:'Jul 24',out:true},
+    ]}
+  ]},
+];
+
+// ── BUILD PIPELINE STAGES ─────────────────────────────────────────
+function buildPipelineStages(){
+  const c = document.getElementById('pipeline-stages');
+  pipelineStages.forEach((s,i) => {
+    const div = document.createElement('div');
+    div.innerHTML = `
+      <div class="flow-stage${s.key?' key':''}" id="ps-${s.id}" onclick="selectDetail('${s.id}')">
+        <div class="stage-n">${s.n}</div>
+        <div class="stage-b">
+          <div><div class="stage-title">${s.title}</div><div class="stage-sub">${s.sub}</div></div>
+          <div class="stage-tags">${s.tags.map(t=>`<span class="auto-tag ${t.c}">${t.l}</span>`).join('')}</div>
+        </div>
+      </div>`;
+    c.appendChild(div.firstElementChild);
+
+    if(s.id==='fin-analysis'){
+      const b = document.createElement('div');
+      b.className='burst-row';
+      b.innerHTML=`<div class="burst-chip" id="bc-auto4" onclick="selectDetail('auto4')"><div class="burst-chip-label">Auto 4</div><div class="burst-chip-desc">Pre-M1 $750 created</div></div>`;
+      c.appendChild(b);
+    }
+    if(s.id==='ati'){
+      const b = document.createElement('div');
+      b.className='burst-row';
+      b.innerHTML=`
+        <div class="burst-chip" id="bc-auto1" onclick="selectDetail('auto1')"><div class="burst-chip-label">Auto 1</div><div class="burst-chip-desc">M1 commission created</div></div>
+        <div class="burst-chip" id="bc-auto3" onclick="selectDetail('auto3')"><div class="burst-chip-label">Auto 3</div><div class="burst-chip-desc">Tranche flag → Unassigned ATI</div></div>
+        <div class="burst-chip" id="bc-auto5" onclick="selectDetail('auto5')"><div class="burst-chip-label">Auto 5</div><div class="burst-chip-desc">System size watch on</div></div>`;
+      c.appendChild(b);
+    }
+    if(s.id==='pto'){
+      const b = document.createElement('div');
+      b.className='burst-row';
+      b.innerHTML=`
+        <div class="burst-chip" id="bc-auto2-compliance" onclick="selectDetail('auto2-compliance')"><div class="burst-chip-label">Auto 2 — compliance</div><div class="burst-chip-desc">5 tasks created</div></div>
+        <div class="burst-chip" id="bc-auto2-commission" onclick="selectDetail('auto2-commission')"><div class="burst-chip-label">Auto 2 — commission</div><div class="burst-chip-desc">M2 eligible flagged</div></div>
+        <div class="burst-chip" id="bc-auto2-tranche" onclick="selectDetail('auto2-tranche')"><div class="burst-chip-label">Auto 2 — tranche</div><div class="burst-chip-desc">Flag → Unassigned PTO</div></div>`;
+      c.appendChild(b);
+    }
+    if(i<pipelineStages.length-1){
+      const cv = document.createElement('div');
+      cv.className='connector-v';
+      c.appendChild(cv);
+    }
+  });
+}
+
+function selectDetail(id){
+  const d = stageData[id];
+  if(!d) return;
+  document.querySelectorAll('.flow-stage,.burst-chip,.ds-card,.dash-node,.om-node').forEach(el=>el.classList.remove('selected'));
+  const el = document.getElementById('ps-'+id)||document.getElementById('bc-'+id)||document.querySelector(`[onclick="selectDetail('${id}')"]`);
+  if(el) el.classList.add('selected');
+  const panel = document.getElementById('pipeline-detail');
+  let html = `<div class="d-tag ${d.tc}">${d.tag}</div><div class="d-title">${d.title}</div><div class="d-sub">${d.sub}</div><div class="d-divider"></div>`;
+  if(d.type==='tca'){
+    html+=`<div class="tca"><div class="tca-box trigger"><div class="tca-lbl trigger">Trigger</div><div class="tca-val">${d.tca.trigger}</div></div><div class="tca-box condition"><div class="tca-lbl condition">Condition</div><div class="tca-val">${d.tca.condition}</div></div><div class="tca-box action"><div class="tca-lbl action">Action</div><div class="tca-val">${d.tca.action}</div></div></div>`;
+  } else {
+    html+=`<div class="d-body">${d.body}</div>`;
+  }
+  panel.innerHTML=html;
+}
+
+// ── BUILD AUTOMATIONS ─────────────────────────────────────────────
+function buildAutomations(){
+  const c = document.getElementById('auto-container');
+  autoData.forEach(a=>{
+    c.innerHTML+=`<div class="auto-card">
+      <div class="auto-card-hdr ${['ent','notif'].includes(a.bclass)?a.bclass==='ent'?'workflow':'notify':''}">
+        <span class="a-badge ${a.bclass}">${a.badge}</span>
+        <span class="a-label">${a.label}</span>
+      </div>
+      <div class="a-tca">
+        <div class="a-cell"><div class="a-lbl t">Trigger</div><div class="a-val">${a.trigger}</div></div>
+        <div class="a-cell"><div class="a-lbl c">Condition</div><div class="a-val">${a.condition}</div></div>
+        <div class="a-cell"><div class="a-lbl a">Action</div><div class="a-val">${a.action}</div></div>
+      </div>
+    </div>`;
+  });
+}
+
+// ── BUILD TASKS ───────────────────────────────────────────────────
+let taskTotal=0, taskDone=0;
+function buildTasks(){
+  const c = document.getElementById('task-container');
+  allTasks.forEach(phase=>{
+    let html=`<div class="tl-phase"><div class="tl-phase-hdr ${phase.pclass}"><span class="tl-phase-name">${phase.phase}</span></div>`;
+    phase.weeks.forEach(week=>{
+      html+=`<div class="tl-week"><div class="tl-week-label">${week.label}</div>`;
+      week.tasks.forEach((task,ti)=>{
+        taskTotal++;
+        const uid=`t_${taskTotal}`;
+        html+=`<div class="task-item" id="ti_${uid}">
+          <div class="task-cb" id="cb_${uid}" onclick="toggleTask('${uid}')"></div>
+          <div class="task-text">${task.t}</div>
+          ${task.dep?`<span class="task-tag tag-dep">Dep</span>`:''}
+          ${task.out?`<span class="task-tag tag-out">Output</span>`:''}
+          <span class="task-date${task.today?' today':''}">${task.today?'Today':task.d}</span>
+        </div>`;
+      });
+      html+=`</div>`;
+    });
+    html+=`</div>`;
+    c.innerHTML+=html;
+  });
+  updateTaskProgress();
+}
+
+function buildTimeline(){
+  const c = document.getElementById('timeline-container');
+  let html='';
+  allTasks.forEach(phase=>{
+    html+=`<div class="tl-phase"><div class="tl-phase-hdr ${phase.pclass}"><span class="tl-phase-name">${phase.phase}</span></div>`;
+    phase.weeks.forEach(week=>{
+      html+=`<div class="tl-week"><div class="tl-week-label">${week.label}</div>`;
+      week.tasks.forEach(task=>{
+        taskTotal++;
+        const uid=`tl_${taskTotal}`;
+        html+=`<div class="tl-task" id="tli_${uid}">
+          <div class="tl-cb" id="tlcb_${uid}" onclick="toggleTlTask('${uid}')"></div>
+          <div class="tl-task-text">${task.t}</div>
+          ${task.dep?`<span class="tl-dep-tag">Dep</span>`:''}
+          <span class="tl-task-date${task.today?' tod':''}">${task.today?'Today':task.d}</span>
+        </div>`;
+      });
+      html+=`</div>`;
+    });
+    html+=`</div>`;
+  });
+  c.innerHTML=html;
+}
+
+function toggleTask(uid){
+  const cb=document.getElementById('cb_'+uid);
+  const row=document.getElementById('ti_'+uid);
+  const isDone=cb.classList.toggle('checked');
+  row.classList.toggle('done',isDone);
+  isDone?taskDone++:taskDone--;
+  updateTaskProgress();
+}
+function toggleTlTask(uid){
+  const cb=document.getElementById('tlcb_'+uid);
+  const row=document.getElementById('tli_'+uid);
+  cb.classList.toggle('chk');
+  row.classList.toggle('done-t');
+}
+function updateTaskProgress(){
+  const pct=taskTotal?Math.round(taskDone/taskTotal*100):0;
+  document.getElementById('task-prog').style.width=pct+'%';
+  document.getElementById('task-prog-label').textContent=`${taskDone} / ${taskTotal} done`;
+  document.getElementById('task-prog-pct').textContent=pct+'%';
+}
+
+// ── NAV ───────────────────────────────────────────────────────────
+const titles={'overview':'Project Overview','tasks':'All Tasks','timeline':'Timeline','pipeline':'Pipeline Board','tranche':'Tranche Management','commission':'Commission Tracking','compliance':'Post-PTO Compliance','dashboard':'Management Dashboard','om':'O&M Foundation','automations':'All Automations','deps':'Dependencies'};
+function nav(id){
+  document.querySelectorAll('.page-section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  document.querySelector(`[onclick="nav('${id}')"]`).classList.add('active');
+  document.getElementById('topbar-title').textContent=titles[id]||id;
+  window.scrollTo(0,0);
+}
+
+// ── INIT ──────────────────────────────────────────────────────────
+buildPipelineStages();
+buildAutomations();
+buildTasks();
+buildTimeline();
+</script>
+</body>
+</html>
